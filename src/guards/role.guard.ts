@@ -15,6 +15,8 @@ export class RoleGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
+    
+    // poderia pegar a role do token jwt
     const userRole = request.headers['role'];
 
     if (roles.includes(userRole)) {
