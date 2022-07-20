@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model People {
+  id             Int      @id @default(autoincrement())
+  name           String
+  documentNumber String
+  createdAt      DateTime @default(now())
+  createdBy      String
+  updatedAt      DateTime @updatedAt
+  updatedBy      String
+  clientId       Int?
+  client         Clients? @relation(fields: [clientId], references: [id])
+}
+
+model Clients {
+  id           Int      @id @default(autoincrement())
+  name         String
+  clientTypeId Int
+  createdAt    DateTime @default(now())
+  createdBy    String
+  updatedAt    DateTime @updatedAt
+  updatedBy    String
+  people       People[]
+  locals       Locals[]
+}
+
+model Locals {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  createdBy String
+  updatedAt DateTime @updatedAt
+  updatedBy String
+  clientId  Int?
+  client    Clients? @relation(fields: [clientId], references: [id])
+}
+
+model Profiles {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  createdBy String
+  updatedAt DateTime @updatedAt
+  updatedBy String
+  users     Users[]
+}
+
+model Users {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  createdBy String
+  updatedAt DateTime @updatedAt
+  updatedBy String
+  profile   Profiles @relation(fields: [profileId], references: [id])
+  profileId Int
+}
